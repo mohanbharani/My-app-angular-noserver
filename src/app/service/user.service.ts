@@ -24,6 +24,7 @@ export class UserService{
         });
     }
     
+    
     deleteUserData = (userObj: UserDetail): void => {
         this.backendService.deleteData<UserDetail>(this.storageName, userObj);
     }

@@ -36,6 +36,7 @@ export class UserComponent implements OnInit {
     if(delUser){
       this.userService.deleteUserData(delUser);
       //this.users = this.userService.getUserData();
+      
       //this.toastr.success('User deleted successfully!');
     } else{
       //this.toastr.error('User is not valid to delete', 'Toastr fun!');
