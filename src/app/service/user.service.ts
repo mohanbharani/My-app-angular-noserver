@@ -1,48 +1,32 @@
 import { Injectable } from "@angular/core";
-import { userData, UserDetail } from "./user-data";
+import { UserDetail } from "./user-data";
+import { BackendService } from "./backend.service";
+import AppConstant from "../constant/appConstant";
 
 
 @Injectable({
     providedIn: 'root',
 })
-
 export class UserService{
 
+    constructor(private backendService: BackendService){}
 
-    getUserData(storageName: string) : UserDetail[] | undefined {
+    storageName = AppConstant.userData;
+    noUser = AppConstant.noUser;
 
-        var data = localStorage.getItem('userData') as string;
-
-        if(data === undefined || data === null || data === '') {
-           this.setUserData('userData', userData);
-           return userData;
-        }
-
-        var parsedData: UserDetail[] = JSON.parse(data);
-        return userData;
+    getUserData = (): Promise<UserDetail[]> => { 
+        return this.backendService.getData(this.storageName).then(res => {
+         const    userdata = JSON.parse(res);
+            console.log('Promise :: ',userdata);
+            return userdata;
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+    
+    deleteUserData = (userObj: UserDetail): void => {
+        this.backendService.deleteData<UserDetail>(this.storageName, userObj);
     }
 
-    setUserData(storageName: string, data: UserDetail[]) : void {
-
-        if(data!){
-            data = userData;
-        }
-
-        localStorage.setItem(storageName, JSON.stringify(data));
-    }
-
-    deleteUserData(id: number): void{
-
-    }
-
-    addorupdateUserData(data: UserDetail): void{
-        if(data.id !== 0){
-
-           // var fetchData = this.getUserData();
-
-        }else{
-
-        }
-
-    }
+    
 }

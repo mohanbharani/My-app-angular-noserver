@@ -13,33 +13,51 @@ export class BackendService {
         return userData;
     }
 
-    getData(storageName: string): string {
+    getData(storageName: string): Promise<any> {
 
-        let data = localStorage.getItem(storageName) as string;
+        return new Promise((resolve, reject) => {
 
-        if ((data === undefined || data === null || data === '') && storageName === 'userData') {
-            data = this.getDefaultUserData(storageName);
-        }
+            let data = localStorage.getItem(storageName);
 
-        var parsedData = JSON.parse(data);
-        return parsedData;
+            if((!data || data === '') && storageName === 'userData'){
+                data = this.getDefaultUserData(storageName);
+            }
+
+            if(!data || data === '')
+                return resolve(null);
+
+            try {
+                resolve(data);
+            }
+            catch(e){
+                reject(e);
+            }
+        });
+        // let data = localStorage.getItem(storageName) as string;
+
+        // if ((data === undefined || data === null || data === '') && storageName === 'userData') {
+        //     data = this.getDefaultUserData(storageName);
+        // }
+
+        // var parsedData = JSON.parse(data);
+        // return parsedData;
     }
 
     setData<Type>(storageName: string, data: Type): void {
         localStorage.setItem(storageName, JSON.stringify(data));
     }
 
-    deleteData<Type>(storageName: string, deleteObj: Type): Type[] {
+    deleteData<Type>(storageName: string, deleteObj: Type): void {
 
-        var data = JSON.parse(this.getData(storageName));
+        // var data = JSON.parse(this.getData(storageName));
 
-        data = [ ...data, deleteObj ];
-        this.setData(storageName, data);
+        // data = data.filter((x: Type) => x === deleteObj);
+        // this.setData(storageName, data);
 
-        return data;
+        //return data;
     }
 
-    addorupdateUserData(data: any): void {
+    addorupdateData(data: any): void {
         if (data.id !== 0) {
 
             //var fetchData = this.getUserData();
