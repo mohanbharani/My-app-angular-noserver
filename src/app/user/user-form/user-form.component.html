@@ -42,8 +42,33 @@
                     </div>
                 </div>
             </div>
+            <div class="d-flex justify-content-between p-2">
+                <label >Gender </label>
+                <div class="row w-75">
+                    <label >Male <input type="radio" id="gender" value="Male" formControlName="gender"  [ngClass]="{'is-invalid' : profileForm.get('gender')?.invalid && (profileForm.get('gender')?.dirty || profileForm.get('gender')?.touched)}" /></label>
+                    <label >Female <input type="radio" id="gender" value="Female" formControlName="gender"  [ngClass]="{'is-invalid' : profileForm.get('gender')?.invalid && (profileForm.get('gender')?.dirty || profileForm.get('gender')?.touched)}" /></label>
+                    <div class="col invalid-feedback" *ngIf="profileForm.get('gender')?.invalid && (profileForm.get('gender')?.dirty || profileForm.get('gender')?.touched)">
+                        Please select gender.
+                    </div>
+
+                    
+                </div>
+            </div>
+            <div class="d-flex justify-content-between p-2">
+                <label for="country">Country </label>
+                <div class="row w-75">
+                    <select name="country" id="country">
+                        <option [ngValue]="null">Select Country</option>
+                        <option *ngFor="let item of countries" [ngValue]="profileForm">{{item}}</option>
+                    </select>
+
+                    <!-- <div class="col invalid-feedback" *ngIf="profileForm.get('country')?.invalid && (profileForm.get('country')?.dirty || profileForm.get('country')?.touched)">
+                        Please select country.
+                    </div> -->
+                </div>
+            </div>
             <div class="d-flex items-start p-2">
-                
+                <label for="isActive">isActive </label>
                 <div class="row w-50">
                     <input type="checkbox" id="isActive" formControlName="isActive" [ngClass]="{'is-invalid' : profileForm.get('isActive')?.invalid && (profileForm.get('isActive')?.dirty || profileForm.get('isActive')?.touched)}" title="isActive" />
                     <div class="col invalid-feedback" *ngIf="profileForm.get('isActive')?.invalid && (profileForm.get('isActive')?.dirty || profileForm.get('isActive')?.touched)">
