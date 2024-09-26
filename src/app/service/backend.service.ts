@@ -2,24 +2,25 @@ import { Injectable } from "@angular/core";
 import { userData, UserDetail } from "./user-data";
 import { JsonPipe } from "@angular/common";
 
-
 @Injectable({
     providedIn: 'root',
 })
-export class BackendService {
+export class BackendService<T extends {id: number}> {
 
     getDefaultUserData(storageName: string): any {
         this.setData(storageName, userData);
         return userData;
     }
 
+    getById(id): T {
+
+    }
     getData(storageName: string): Promise<any> {
 
         return new Promise((resolve, reject) => {
-
             let data = localStorage.getItem(storageName);
 
-            if((!data || data === '') && storageName === 'userData'){
+            if((!data || data === ''|| data === null) && storageName === 'userData'){
                 data = this.getDefaultUserData(storageName);
             }
 
@@ -27,7 +28,7 @@ export class BackendService {
                 return resolve(null);
 
             try {
-                resolve(data);
+                resolve(JSON.parse(data));
             }
             catch(e){
                 reject(e);
@@ -43,24 +44,27 @@ export class BackendService {
         // return parsedData;
     }
 
-    setData<Type>(storageName: string, data: Type): void {
+    setData<Type>(storageName: string, data: any): void {
         localStorage.setItem(storageName, JSON.stringify(data));
     }
 
-    deleteData<Type>(storageName: string, deleteObj: Type): void {
+    // async deleteData(storageName: string, deleteObj: string): Promise<void> {
 
-        // var data = JSON.parse(this.getData(storageName));
+    //     var data = await this.getData(storageName)
 
-        // data = data.filter((x: Type) => x === deleteObj);
-        // this.setData(storageName, data);
+    //     data = data.filter((x) => x === deleteObj);
+    //     this.setData(storageName, data);
 
-        //return data;
+    //     return data;
         
-    }
+    // }
 
-    addorupdateData(data: any): void {
-        if (data.id !== 0) {
+    addorupdateData(storageName: string, data: any): void {
+        if (data.id === 0) {
 
+            this.getData(storageName).then(res => {
+                
+            })
             //var fetchData = this.getUserData();
 
         } else {
