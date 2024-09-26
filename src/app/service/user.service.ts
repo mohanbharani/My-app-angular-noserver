@@ -1,48 +1,64 @@
 import { Injectable } from "@angular/core";
-import { userData, UserDetail } from "./user-data";
+import { UserDetail } from "./user-data";
+import { BackendService } from "./backend.service";
+import AppConstant from "../constant/appConstant";
 
 
-@Injectable({
-    providedIn: 'root',
-})
-
+@Injectable()
 export class UserService{
 
+    constructor(private backendService: BackendService<UserDetail>){}
 
-    getUserData(storageName: string) : UserDetail[] | undefined {
+    storageName = AppConstant.userData;
+    noUser = AppConstant.noUser;
 
-        var data = localStorage.getItem('userData') as string;
+    userData: UserDetail[] = [];
 
-        if(data === undefined || data === null || data === '') {
-           this.setUserData('userData', userData);
-           return userData;
-        }
-
-        var parsedData: UserDetail[] = JSON.parse(data);
-        return userData;
+    getUserData = (): Promise<UserDetail[]> => { 
+        return this.backendService.getData(this.storageName).then(res => {
+            console.log('getUserData :: ',res);
+            
+            const userdata: any = res; //JSON.parse(res);
+            this.userData = userdata;
+            return userdata;
+        }).catch(e => {
+            console.log(e);
+        });
     }
 
-    setUserData(storageName: string, data: UserDetail[]) : void {
+    findUserData = async (id: number): Promise<UserDetail> => { 
+        this.userData = await this.getUserData();
 
-        if(data!){
-            data = userData;
-        }
+        const user = this.userData.find(x => x.id === id) as UserDetail;
 
-        localStorage.setItem(storageName, JSON.stringify(data));
+        console.log('find user data :: ',user);
+        
+
+        if(!user)
+            throw new Error(`User with id ${id} not found`);
+
+        return user;
+        
+    }
+    
+    
+    deleteUserData = (id: number): void => {
+        var data  = this.userData.filter(x => x.id !== id);
+        this.backendService.setData(this.storageName, data);
+
     }
 
-    deleteUserData(id: number): void{
+    addUserData = async (newUser: UserDetail): Promise<string> =>{
+        this.userData = await this.getUserData();
 
+        const maxId = this.userData.length > 0 ? Math.max(...this.userData.map(o => o.id)) : 0;
+        newUser.id = maxId + 1;
+        console.log('this.userData :: ',this.userData);
+        
+        var data = [...this.userData, newUser];
+        this.backendService.setData(this.storageName, data);
+
+        return 'User added successfully';
     }
-
-    addorupdateUserData(data: UserDetail): void{
-        if(data.id !== 0){
-
-           // var fetchData = this.getUserData();
-
-        }else{
-
-        }
-
-    }
+    
 }

@@ -1,0 +1,60 @@
+
+<div class="container">
+    <div class="row alert alert-primary w-50">
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit(profileForm)" class="form-group needs-validation">
+            <div class="d-flex justify-content-between p-2 text-nowrap">
+                <label for="firstName" class="form-label">First Name </label>
+                <div class="row w-75">
+                    <input type="text" id="firstName" formControlName="firstName" class="form-control" [ngClass]="{'is-invalid' : profileForm.get('firstName')?.invalid && (profileForm.get('firstName')?.dirty || profileForm.get('firstName')?.touched)}" />
+                    <div class="col invalid-feedback" *ngIf="profileForm.get('firstName')?.invalid && (profileForm.get('firstName')?.dirty || profileForm.get('firstName')?.touched)">
+                        Please provide first name.
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="d-flex justify-content-between p-2">
+                <label for="lastName">Last Name </label>
+                <div class="row w-75">
+                    <input type="text" id="lastName" formControlName="lastName" class="form-control" [ngClass]="{'is-invalid' : profileForm.get('lastName')?.invalid && (profileForm.get('lastName')?.dirty || profileForm.get('lastName')?.touched)}" />
+                    <div class="col invalid-feedback" *ngIf="profileForm.get('lastName')?.invalid && (profileForm.get('lastName')?.dirty || profileForm.get('lastName')?.touched)">
+                        Please provide last name.
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between p-2">
+                <label for="email">email </label>
+                
+                <div class="row w-75">
+                    <input type="email" id="email" formControlName="email" class="form-control" [ngClass]="{'is-invalid' : profileForm.get('email')?.invalid && (profileForm.get('email')?.dirty || profileForm.get('email')?.touched)}" />
+                    <div class="col invalid-feedback" *ngIf="profileForm.get('email')?.invalid && (profileForm.get('email')?.dirty || profileForm.get('email')?.touched)">
+                        Please provide email.
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between p-2">
+                <label for="mobile">Mobile </label>
+                
+                <div class="row w-75">
+                    <input type="text" id="mobile" formControlName="mobile" class="form-control" [ngClass]="{'is-invalid' : profileForm.get('mobile')?.invalid && (profileForm.get('mobile')?.dirty || profileForm.get('mobile')?.touched)}" />
+                    <div class="col invalid-feedback" *ngIf="profileForm.get('mobile')?.invalid && (profileForm.get('mobile')?.dirty || profileForm.get('mobile')?.touched)">
+                        Please provide mobile.
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex items-start p-2">
+                
+                <div class="row w-50">
+                    <input type="checkbox" id="isActive" formControlName="isActive" [ngClass]="{'is-invalid' : profileForm.get('isActive')?.invalid && (profileForm.get('isActive')?.dirty || profileForm.get('isActive')?.touched)}" title="isActive" />
+                    <div class="col invalid-feedback" *ngIf="profileForm.get('isActive')?.invalid && (profileForm.get('isActive')?.dirty || profileForm.get('isActive')?.touched)">
+                        Please select
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end p-2">
+                <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid" >Submit</button>
+            </div>
+        </form>
+    </div>
+    
+</div>

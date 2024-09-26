@@ -2,46 +2,69 @@ import { Injectable } from "@angular/core";
 import { userData, UserDetail } from "./user-data";
 import { JsonPipe } from "@angular/common";
 
-
 @Injectable({
     providedIn: 'root',
 })
-export class BackendService {
+export class BackendService<T extends {id: number}> {
 
     getDefaultUserData(storageName: string): any {
         this.setData(storageName, userData);
         return userData;
     }
 
-    getData(storageName: string): string {
+    getById(id): T {
 
-        let data = localStorage.getItem(storageName) as string;
+    }
+    getData(storageName: string): Promise<any> {
 
-        if ((data === undefined || data === null || data === '') && storageName === 'userData') {
-            data = this.getDefaultUserData(storageName);
-        }
+        return new Promise((resolve, reject) => {
+            let data = localStorage.getItem(storageName);
 
-        var parsedData = JSON.parse(data);
-        return parsedData;
+            if((!data || data === ''|| data === null) && storageName === 'userData'){
+                data = this.getDefaultUserData(storageName);
+            }
+
+            if(!data || data === '')
+                return resolve(null);
+
+            try {
+                resolve(JSON.parse(data));
+            }
+            catch(e){
+                reject(e);
+            }
+        });
+        // let data = localStorage.getItem(storageName) as string;
+
+        // if ((data === undefined || data === null || data === '') && storageName === 'userData') {
+        //     data = this.getDefaultUserData(storageName);
+        // }
+
+        // var parsedData = JSON.parse(data);
+        // return parsedData;
     }
 
-    setData<Type>(storageName: string, data: Type): void {
+    setData<Type>(storageName: string, data: any): void {
         localStorage.setItem(storageName, JSON.stringify(data));
     }
 
-    deleteData<Type>(storageName: string, deleteObj: Type): Type[] {
+    // async deleteData(storageName: string, deleteObj: string): Promise<void> {
 
-        var data = JSON.parse(this.getData(storageName));
+    //     var data = await this.getData(storageName)
 
-        data = [ ...data, deleteObj ];
-        this.setData(storageName, data);
+    //     data = data.filter((x) => x === deleteObj);
+    //     this.setData(storageName, data);
 
-        return data;
-    }
+    //     return data;
+        
+    // }
 
-    addorupdateUserData(data: any): void {
-        if (data.id !== 0) {
+    addorupdateData(storageName: string, data: any): void {
+        if (data.id === 0) {
 
+            this.getData(storageName).then(res => {
+                
+            })
             //var fetchData = this.getUserData();
 
         } else {
